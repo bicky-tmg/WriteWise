@@ -1,9 +1,10 @@
 package repositories
 
 import (
-	articleModel "WriteWise/internal/modules/article/models"
+	ArticleModel "WriteWise/internal/modules/article/models"
 )
 
 type ArticleRepositoryInterface interface {
-	List(limit int) []articleModel.Article
+	List(limit int) []ArticleModel.Article
+	Find(id int) ArticleModel.Article
 }

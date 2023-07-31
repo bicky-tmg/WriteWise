@@ -3,6 +3,7 @@ package services
 import (
 	ArticleRepository "WriteWise/internal/modules/article/repositories"
 	ArticleResponse "WriteWise/internal/modules/article/responses"
+	"errors"
 )
 
 type ArticleService struct {
@@ -25,4 +26,16 @@ func (as *ArticleService) GetStoriesArticle() ArticleResponse.Articles {
 	articles := as.articleRepository.List(6)
 
 	return ArticleResponse.ToArticles(articles)
+}
+
+func (as *ArticleService) Find(id int) (ArticleResponse.Article, error) {
+	var response ArticleResponse.Article
+
+	article := as.articleRepository.Find(id)
+
+	if article.ID == 0 {
+		return response, errors.New("article not found")
+	}
+
+	return ArticleResponse.ToArticle(article), nil
 }
