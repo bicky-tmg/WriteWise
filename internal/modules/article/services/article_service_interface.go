@@ -1,8 +1,8 @@
 package services
 
-import articleModel "WriteWise/internal/modules/article/models"
+import ArticleResponse "WriteWise/internal/modules/article/responses"
 
 type ArticleServiceInterface interface {
-	GetFeaturedArticle() []articleModel.Article
-	GetStoriesArticle() []articleModel.Article
+	GetFeaturedArticle() ArticleResponse.Articles
+	GetStoriesArticle() ArticleResponse.Articles
 }

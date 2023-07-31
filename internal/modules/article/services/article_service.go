@@ -1,24 +1,28 @@
 package services
 
 import (
-	articleModel "WriteWise/internal/modules/article/models"
-	articleRepository "WriteWise/internal/modules/article/repositories"
+	ArticleRepository "WriteWise/internal/modules/article/repositories"
+	ArticleResponse "WriteWise/internal/modules/article/responses"
 )
 
 type ArticleService struct {
-	articleRepository articleRepository.ArticleRepositoryInterface
+	articleRepository ArticleRepository.ArticleRepositoryInterface
 }
 
 func New() *ArticleService {
 	return &ArticleService{
-		articleRepository: articleRepository.New(),
+		articleRepository: ArticleRepository.New(),
 	}
 }
 
-func (as *ArticleService) GetFeaturedArticle() []articleModel.Article {
-	return as.articleRepository.List(4)
+func (as *ArticleService) GetFeaturedArticle() ArticleResponse.Articles {
+	articles := as.articleRepository.List(4)
+
+	return ArticleResponse.ToArticles(articles)
 }
 
-func (as *ArticleService) GetStoriesArticle() []articleModel.Article {
-	return as.articleRepository.List(6)
+func (as *ArticleService) GetStoriesArticle() ArticleResponse.Articles {
+	articles := as.articleRepository.List(6)
+
+	return ArticleResponse.ToArticles(articles)
 }
