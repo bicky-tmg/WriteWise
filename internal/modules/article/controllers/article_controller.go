@@ -2,6 +2,7 @@ package controllers
 
 import (
 	ArticleService "WriteWise/internal/modules/article/services"
+	"WriteWise/pkg/html"
 	"net/http"
 	"strconv"
 
@@ -22,19 +23,19 @@ func (controller *Controller) Show(c *gin.Context) {
 	// Get the article
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "error while converting the id"})
+		html.Render(c, http.StatusInternalServerError, "templates/errors/html/500", gin.H{"title": "Server error", "message": "error while converting the id"})
 		return
 	}
 
-	// Find the article
+	// Find the article from the database
 	article, err := controller.articleService.Find(id)
 
 	// If the article is not found, show error page
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		html.Render(c, http.StatusNotFound, "templates/errors/html/404", gin.H{"title": "Page not found", "message": err.Error()})
 		return
 	}
 
 	// If article found, render article template
-	c.JSON(http.StatusOK, gin.H{"article": article})
+	html.Render(c, http.StatusOK, "modules/article/html/show", gin.H{"title": "Show article", "article": article})
 }
