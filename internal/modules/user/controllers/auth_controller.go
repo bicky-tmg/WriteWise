@@ -2,16 +2,23 @@ package controllers
 
 import (
 	"WriteWise/internal/modules/user/requests/auth"
+	UserService "WriteWise/internal/modules/user/services"
+	"log"
+
 	"WriteWise/pkg/html"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Controller struct{}
+type Controller struct {
+	userService UserService.UserServiceInterface
+}
 
 func New() *Controller {
-	return &Controller{}
+	return &Controller{
+		userService: UserService.New(),
+	}
 }
 
 func (ctrl *Controller) Register(c *gin.Context) {
@@ -26,10 +33,17 @@ func (ctrl *Controller) HandleRegister(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/register")
 		return
 	}
+
 	// Create the user
+	user, err := ctrl.userService.Create(request)
 
 	// Check if there is any error on the user creation
+	if err != nil {
+		c.Redirect(http.StatusFound, "/register")
+		return
+	}
 
 	// after creating the user > redirect to homepage
-	c.JSON(http.StatusOK, gin.H{"message": "Register done..."})
+	log.Printf("The user created successfully with a name %s \n", user.Name)
+	c.Redirect(http.StatusFound, "/")
 }

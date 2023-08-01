@@ -21,3 +21,7 @@ config/config.yml
 
 # Go workspace file
 go.work
+
+# IntelliJ IDEA
+.idea/
+*.iml
